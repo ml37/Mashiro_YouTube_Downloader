@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="Btn_Download">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>240</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Download</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="RB_WebM">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>108</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>WebM</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="RB_MP4">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>108</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>MP4</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="TBox_URL">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>351</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="ComBox_Resolution">
+   <property name="geometry">
+    <rect>
+     <x>243</x>
+     <y>60</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>720p</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>480p</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>360p</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>240p</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>144p</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QCheckBox" name="CBox_AudioOnly">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>270</y>
+     <width>96</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Audio Only</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
