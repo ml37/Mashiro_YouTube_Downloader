@@ -10,6 +10,7 @@ def on_progress(stream, chunk, bytes_remaining):
     percentage_of_completion = round(bytes_downloaded / total_size * 100, 1)
     print(f'{percentage_of_completion}%, {done_size}MB/{bytes_remaining_MB}MB')'''
     global filesize
+    filesize = stream.filesize
     current = ((filesize - bytes_remaining)/filesize)
     percent = ('{0:.1f}').format(current*100)
     progress = int(50*current)
@@ -26,7 +27,7 @@ print(f'Video Thumbnail : {yt.thumbnail_url}')
 print(f'Channel URL : {yt.channel_url}')
 print('--------------------')
 print(yt.streams.filter().order_by('resolution'))
-stream = yt.streams.filter(adaptive=True).order_by('resolution').last()
+stream = yt.streams.filter(progressive=True).order_by('resolution').last()
 print(f'Video Quality : {stream.resolution}')
 print(f'Video Size : {round((stream.filesize)*0.000001,2)}MB')
 print(f'Video Type : {stream.mime_type}')
