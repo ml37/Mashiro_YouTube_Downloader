@@ -1,8 +1,5 @@
-from typing_extensions import IntVar
 from pytube import YouTube
-from PyQt5 import QtWidgets, uic
-import sys
-
+from PyQt5 import QtWidgets
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
@@ -17,12 +14,15 @@ class MyWindow(QMainWindow, form_class):
         self.Btn_Download.clicked.connect(self.Btn_Download_clicked)
         self.RB_WebM.clicked.connect(self.RB_WebM_clicked)
         self.RB_MP4.clicked.connect(self.RB_MP4_clicked)
-        self.RB_MP4.setChecked(True)
         self.CBox_AudioOnly.stateChanged.connect(self.CBox_AudioOnly_Changed)
-        self.ComBox_Quality.currentIndexChanged.connect(self.ComBox_Quality_Changed)
+        self.ComBox_Resolution.currentIndexChanged.connect(self.ComBox_Resolution_Changed)
 
     def Btn_Download_clicked (self):
-        QMessageBox.about(self, "message", RB_mimi_type)
+        print('----------------------------------------------------')
+        print(RB_mimi_type)
+        print(f'Audio Only : {AudioOnly}')
+        print(self.ComBox_Resolution.currentText())
+
     def RB_WebM_clicked (self):
         print('WebM')
         RB_mimi_type = 'WebM'
@@ -36,6 +36,8 @@ class MyWindow(QMainWindow, form_class):
         elif self.CBox_AudioOnly.isChecked() == False:
             print('Audio Only Turned off')
             AudioOnly = 'off'
+    def ComBox_Resolution_Changed (self):
+        print(self.ComBox_Resolution.currentText())
 
 if __name__ =='__main__':
         app = QApplication(sys.argv)
