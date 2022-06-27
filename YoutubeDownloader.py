@@ -46,6 +46,7 @@ def on_progress(stream, chunk, bytes_remaining):
     status = '█' * progress + '-' * (50 - progress)
     sys.stdout.write(' ↳  |{bar}| {percent}%\r'.format(bar=status, percent=percent))
     sys.stdout.flush()
+#progressbar on list
 def on_progress_list():
     current_list = (count)/(fullcount)
     percent_list = ('{0:.1f}').format(current_list*100)
@@ -98,11 +99,15 @@ def chVideoClick():
     print('----')
     print('Channel Video Download Start')
     os.chdir(f'Channel/{ch.channel_name}/Video')
+    global count
+    count = 0
+    global fullcount
+    fullcount = len(ch)
     for video in ch.videos:
-        print('-' * 50)
-        print(f'Current File : {video.title}')
+        count = count + 1
+        print(f'---{len(ch)}/{count}-----Title:{video.title}-----------------')
         if os.path.isfile(f'{video.title}.mp4') == False :
-            print(f'Video {video.title} not Exists')
+            print(f'Video {video.title} not Exists, Start Download')
             video.streams.filter(progressive=True).order_by('resolution').desc().first().download()
             video.bypass_age_gate = True
             video.register_on_progress_callback(on_progress)
@@ -136,18 +141,17 @@ def chAudioClick():
     fullcount = len(ch)
     for video in ch.videos:
         count = count + 1
-        print(f'-----------------{len(ch)}/{count}/Title:{video.title}-----------------')
-        on_progress_list()
+        print(f'---{len(ch)}/{count}-----Title:{video.title}-----------------')
         if os.path.isfile(f'{video.title}.mp4') == False :
-            print(f'Audio {video.title} not Exists')
+            print(f'Audio {video.title} not Exists, Start Download')
             video.streams.filter(only_audio=True).get_audio_only().download()
             video.bypass_age_gate = True
             video.register_on_progress_callback(on_progress)
-            print(f'Audio {video.title} Downloaded')
+            print(f'Audio "{video.title}" Download Finished')
         else:
-            print(f'Audio {video.title} Already Exists')
-    os.chdir(dp)
+            print(f'Audio "{video.title}" Already Exists')
     print(f'==========Channel Audio Download({len(ch)}) Complete==========')
+    os.chdir(dp)
 def playlistVideoClick():
     print('Download Playlist Video')
     playlistInput = txt.get()
@@ -166,11 +170,14 @@ def playlistVideoClick():
     print('----')
     print('Playlist Video Download Start')
     os.chdir(f'playlist/{pl.title}/Video')
+    global count
+    count = 0
+    global fullcount
+    fullcount = len(ch)
     for video in pl.videos:
-        print('-' * 50)
-        print(f'Current File : {video.title}')
+        print(f'---{len(pl)}/{count}-----Title:{video.title}-----------------')
         if os.path.isfile(f'{video.title}.mp4') == False :
-            print(f'Video {video.title} not Exists')
+            print(f'Video {video.title} not Exists, Start Download')
             video.streams.filter(progressive=True).order_by('resolution').desc().first().download()
             video.bypass_age_gate = True
             video.register_on_progress_callback(on_progress)
@@ -181,8 +188,8 @@ def playlistVideoClick():
     os.chdir(dp)
 def playlistAudioClick():
     print('Download Playlist Audio')
-    playlistAudioInput = txt.get()
-    pl = Playlist(playlistAudioInput)
+    playlistInput = txt.get()
+    pl = Playlist(playlistInput)
     print(f'==========Downloading Audio by: {pl.title}==========')
     print('Playlist Video List//Total Video : '+str(len(pl)))
     #print(pl) #for Debug
@@ -200,21 +207,20 @@ def playlistAudioClick():
     global count
     count = 0
     global fullcount
-    fullcount = len(pl)
+    fullcount = len(ch)
     for video in pl.videos:
         count = count + 1
-        print(f'-----------------{len(pl)}/{count}/Title:{video.title}-----------------')
-        on_progress_list()
+        print(f'---{len(pl)}/{count}-----Title:{video.title}-----------------')
         if os.path.isfile(f'{video.title}.mp4') == False :
-            print(f'Audio {video.title} not Exists')
+            print(f'Audio {video.title} not Exists, Start Download')
             video.streams.filter(only_audio=True).get_audio_only().download()
             video.bypass_age_gate = True
             video.register_on_progress_callback(on_progress)
-            print(f'Audio {video.title} Downloaded')
+            print(f'Audio "{video.title}" Download Finished')
         else:
-            print(f'Audio {video.title} Already Exists')
-    os.chdir(dp)
+            print(f'Audio "{video.title}" Already Exists')
     print(f'==========Playlist Audio Download({len(pl)}) Complete==========')
+    os.chdir(dp)
 #Radio Button Interction print(For Debug)
 def selSingle():
     print('select Single')
