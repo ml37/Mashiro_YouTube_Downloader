@@ -8,9 +8,13 @@ from re import T
 import tkinter
 from tkinter import *
 from tkinter import ttk
+import sys
 #Save Startposition in 'cd'
 cd =os.getcwd()
+dp='D:\Download\YoutubeDownloader' #Set Download Position
 print(f'start position {cd}')
+print(f'Download Position : {dp}')
+os.chdir(dp)
 #Check 'Audio','Video',Channel' Folder Exists/If exists Retrun/Not exists Make that folder
 if os.path.isdir('Audio') == True :
     print('Audio Folder Already Exists')
@@ -27,30 +31,34 @@ else:
 #Set tkinter.Tk() as root
 root = tkinter.Tk()
 #Single, Audio only download
-def AudioClick():
-    print("Audio Download Button Clicked") 
-    urlInput = txt.get()
-    print(urlInput)
-    yt = YouTube(urlInput)
-    stream = yt.streams.filter(only_audio=True).get_audio_only()
-    stream.download()
-    shutil.move(f'{yt.title}.mp4', f'Audio/{yt.title}.mp4')
-    print("Download Complete")
 #Single, Video Download
+def on_progress(stream, chunk, bytes_remaining):
+    global filesize
+    filesize = stream.filesize
+    current = ((filesize - bytes_remaining)/filesize)
+    percent = ('{0:.1f}').format(current*100)
+    progress = int(50*current)
+    status = '█' * progress + '-' * (50 - progress)
+    sys.stdout.write(' ↳  |{bar}| {percent}%\r'.format(bar=status, percent=percent))
+    sys.stdout.flush()
 def VideoClick():
     print("Video Download Button Clicked")
     urlInput = txt.get()
     print(urlInput)
     yt = YouTube(urlInput)
-    stream = yt.streams.filter(progressive=True).order_by('resolution').desc().first()
+    stream = yt.streams.filter(adaptive=True).order_by('resolution').desc().first()
+    yt.register_on_progress_callback(on_progress)
     stream.download()
-    shutil.move(f'{yt.title}.mp4', f'Video/{yt.title}.mp4')
+    #stream = yt.streams.filter(audio_codec='flac').first()
+    #stream.download()
+    #shutil.move(f'{yt.title}.mp4', f'Video/{yt.title}.mp4')
     print("Download Complete")
 #All of Channel, Video Download
 def chVideoClick():
     print('Channel Download Button Clicked')
     channelInput = txt.get()
     ch = Channel(channelInput)
+    print(ch.vanity_url)
     print(f'Downloading videos by: {ch.channel_name}')
     print('Channel Video List')
     print(ch)
@@ -77,35 +85,6 @@ def chVideoClick():
     print('Channel Video Download Complete')
     os.chdir(cd)
 #All of Channel, Audio only Download
-def chAudioClick():
-    print('Channel Audio Download Button Clicked')
-    channelAudioInput = txt.get()
-    ch = Channel(channelAudioInput)
-    print(f'Downloading videos by: {ch.channel_name}')
-    print('Channel Video List')
-    print(ch)
-    if os.path.isdir(f'channel/{ch.channel_name}') == True :
-        print(f'Channel {ch.channel_name} Folder Exists')
-    else:
-        os.mkdir(f'channel/{ch.channel_name}')
-    if os.path.isdir(f'channel/{ch.channel_name}/Audio') == True :
-        print(f'Channel {ch.channel_name} Audio Folder Exists')
-    else :
-        os.mkdir(f'channel/{ch.channel_name}/Audio')
-    print('----')
-    print('Channel Video Download Start')
-    os.chdir(f'channel/{ch.channel_name}/Audio')
-    for video in ch.videos:
-        print('-------')
-        print(video.title)
-        if os.path.isfile(f'{video.title}.mp4') == False :
-            print(f'Audio {video.title} not Exists')
-            video.streams.filter(only_audio=True).get_audio_only().download()
-            print(f'Audio {video.title} Downloaded')
-        else:
-            print(f'Audio {video.title} Already Exists')
-    os.chdir(cd)
-    print('Channel Audio Download Complete')
 #Radio Button Interction print(For Debug)
 def selSingle():
     print('select Single')
@@ -120,16 +99,16 @@ def DownloadClick():
     if var.get() == 1:
         print('Single Video')
         if VorA.get() == 1:
-            print('Audio')
-            AudioClick()
+            print('Audio download is not available')
+            #AudioClick()
         elif VorA.get() == 2:
             print('Video')
             VideoClick()
     elif var.get() == 2:
         print('Channel Video')
         if VorA.get() == 1:
-            print('Audio')
-            chAudioClick()
+            print('Audio download is not available')
+            #chAudioClick()
         elif VorA.get() == 2:
             print('Video')
             chVideoClick()
@@ -162,8 +141,8 @@ R1.pack(side=LEFT)
 R2 = tkinter.Radiobutton(frame2, text="Channel", variable=var, value=2, command=selChannel)
 R2.pack(side=LEFT)
 #####
-R3 = tkinter.Radiobutton(frame3, text="Audio", variable=VorA, value=1, command=selAudio)
-R3.pack(side=LEFT)
+#R3 = tkinter.Radiobutton(frame3, text="Audio", variable=VorA, value=1, command=selAudio)
+#R3.pack(side=LEFT)
 R4 = tkinter.Radiobutton(frame3, text="Video", variable=VorA, value=2, command=selVideo)
 R4.pack(side=LEFT)
 #########
