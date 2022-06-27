@@ -1,6 +1,7 @@
 #YouTube Downloader made with Github Copilot
 from pytube import YouTube
 from pytube import Channel
+from pytube import Playlist
 import os
 from os import path
 import shutil
@@ -25,10 +26,14 @@ if os.path.isdir('Video') == True :
     print('Video Folder Already Exists')
 else:
     os.mkdir('Video')
-if os.path.isdir('channel') == True :
-    print('channel Folder Already Exists')
+if os.path.isdir('Channel') == True :
+    print('Channel Folder Already Exists')
 else:
-    os.mkdir('channel')
+    os.mkdir('Channel')
+if os.path.isdir('Playlist') == True :
+    print('Playlist Folder Already Exists')
+else:
+    os.mkdir('Playlist')
 #Set tkinter.Tk() as root
 root = tkinter.Tk()
 #progressbar On CLI 
@@ -42,7 +47,7 @@ def on_progress(stream, chunk, bytes_remaining):
     sys.stdout.write(' ↳  |{bar}| {percent}%\r'.format(bar=status, percent=percent))
     sys.stdout.flush()
 def on_progress_list():
-    current_list = ((count))/(fullcount))
+    current_list = (count)/(fullcount)
     percent_list = ('{0:.1f}').format(current_list*100)
     progress_list = int(50*current_list)
     status_list = '█' * progress_list + '-' * (50 - progress_list)
@@ -77,22 +82,22 @@ def VideoClick():
 #All of Channel, Video Download
 def chVideoClick():
     print('Download Channel Video')
-    channelInput = txt.get()
-    ch = Channel(channelInput)
+    ChannelInput = txt.get()
+    ch = Channel(ChannelInput)
     print(f'==========Downloading videos by: {ch.channel_name}==========')
     print(f'Channel Video List//Total Video : {len(ch)}')
     #print(ch) #for Debug
-    if os.path.isdir(f'channel/{ch.channel_name}') == True :
+    if os.path.isdir(f'Channel/{ch.channel_name}') == True :
         print(f'Channel {ch.channel_name} Folder Already Exists')
     else:
-        os.mkdir(f'channel/{ch.channel_name}')
-    if os.path.isdir(f'channel/{ch.channel_name}/Video') == True :
+        os.mkdir(f'Channel/{ch.channel_name}')
+    if os.path.isdir(f'Channel/{ch.channel_name}/Video') == True :
         print(f'Channel {ch.channel_name} Video Folder Already Exists')
     else :
-        os.mkdir(f'channel/{ch.channel_name}/Video')
+        os.mkdir(f'Channel/{ch.channel_name}/Video')
     print('----')
     print('Channel Video Download Start')
-    os.chdir(f'channel/{ch.channel_name}/Video')
+    os.chdir(f'Channel/{ch.channel_name}/Video')
     for video in ch.videos:
         print('-' * 50)
         print(f'Current File : {video.title}')
@@ -109,22 +114,22 @@ def chVideoClick():
 #All of Channel, Audio only Download
 def chAudioClick():
     print('Download Channel Audio')
-    channelAudioInput = txt.get()
-    ch = Channel(channelAudioInput)
+    ChannelAudioInput = txt.get()
+    ch = Channel(ChannelAudioInput)
     print(f'==========Downloading Audio by: {ch.channel_name}==========')
     print('Channel Video List//Total Video : '+str(len(ch)))
     #print(ch) #for Debug
-    if os.path.isdir(f'channel/{ch.channel_name}') == True :
+    if os.path.isdir(f'Channel/{ch.channel_name}') == True :
         print(f'Channel {ch.channel_name} Folder Already Exists')
     else:
-        os.mkdir(f'channel/{ch.channel_name}')
-    if os.path.isdir(f'channel/{ch.channel_name}/Audio') == True :
+        os.mkdir(f'Channel/{ch.channel_name}')
+    if os.path.isdir(f'Channel/{ch.channel_name}/Audio') == True :
         print(f'Channel {ch.channel_name} Audio Folder Already Exists')
     else :
-        os.mkdir(f'channel/{ch.channel_name}/Audio')
+        os.mkdir(f'Channel/{ch.channel_name}/Audio')
     print('----')
     print('Channel Audio Download Start')
-    os.chdir(f'channel/{ch.channel_name}/Audio')
+    os.chdir(f'Channel/{ch.channel_name}/Audio')
     global count
     count = 0
     global fullcount
@@ -143,7 +148,73 @@ def chAudioClick():
             print(f'Audio {video.title} Already Exists')
     os.chdir(dp)
     print(f'==========Channel Audio Download({len(ch)}) Complete==========')
-
+def playlistVideoClick():
+    print('Download Playlist Video')
+    playlistInput = txt.get()
+    pl = Playlist(playlistInput)
+    print(f'==========Downloading videos by: {pl.title}==========')
+    print(f'Playlist Video List//Total Video : {len(pl)}')
+    #print(pl) #for Debug
+    if os.path.isdir(f'playlist/{pl.title}') == True :
+        print(f'Playlist {pl.title} Folder Already Exists')
+    else:
+        os.mkdir(f'playlist/{pl.title}')
+    if os.path.isdir(f'playlist/{pl.title}/Video') == True :
+        print(f'Playlist {pl.title} Video Folder Already Exists')
+    else :
+        os.mkdir(f'playlist/{pl.title}/Video')
+    print('----')
+    print('Playlist Video Download Start')
+    os.chdir(f'playlist/{pl.title}/Video')
+    for video in pl.videos:
+        print('-' * 50)
+        print(f'Current File : {video.title}')
+        if os.path.isfile(f'{video.title}.mp4') == False :
+            print(f'Video {video.title} not Exists')
+            video.streams.filter(progressive=True).order_by('resolution').desc().first().download()
+            video.bypass_age_gate = True
+            video.register_on_progress_callback(on_progress)
+            print(f'Video {video.title} Download Finished')
+        else:
+            print(f'Video {video.title} Already Exists')
+    print(f'==========Playlist Video Download({len(pl)}) Complete==========')
+    os.chdir(dp)
+def playlistAudioClick():
+    print('Download Playlist Audio')
+    playlistAudioInput = txt.get()
+    pl = Playlist(playlistAudioInput)
+    print(f'==========Downloading Audio by: {pl.title}==========')
+    print('Playlist Video List//Total Video : '+str(len(pl)))
+    #print(pl) #for Debug
+    if os.path.isdir(f'playlist/{pl.title}') == True :
+        print(f'Playlist {pl.title} Folder Already Exists')
+    else:
+        os.mkdir(f'playlist/{pl.title}')
+    if os.path.isdir(f'playlist/{pl.title}/Audio') == True :
+        print(f'Playlist {pl.title} Audio Folder Already Exists')
+    else :
+        os.mkdir(f'playlist/{pl.title}/Audio')
+    print('----')
+    print('Playlist Audio Download Start')
+    os.chdir(f'playlist/{pl.title}/Audio')
+    global count
+    count = 0
+    global fullcount
+    fullcount = len(pl)
+    for video in pl.videos:
+        count = count + 1
+        print(f'-----------------{len(pl)}/{count}/Title:{video.title}-----------------')
+        on_progress_list()
+        if os.path.isfile(f'{video.title}.mp4') == False :
+            print(f'Audio {video.title} not Exists')
+            video.streams.filter(only_audio=True).get_audio_only().download()
+            video.bypass_age_gate = True
+            video.register_on_progress_callback(on_progress)
+            print(f'Audio {video.title} Downloaded')
+        else:
+            print(f'Audio {video.title} Already Exists')
+    os.chdir(dp)
+    print(f'==========Playlist Audio Download({len(pl)}) Complete==========')
 #Radio Button Interction print(For Debug)
 def selSingle():
     print('select Single')
@@ -153,6 +224,8 @@ def selAudio():
     print('select Audio')
 def selVideo():
     print('select Video')
+def selPlaylist():
+    print('select Playlist')
 #If Download button clicked, Check var(Video or Audio), VorA(Single or Channel)
 def DownloadClick():
     if var.get() == 1:
@@ -171,6 +244,14 @@ def DownloadClick():
         elif VorA.get() == 2:
             print('Video')
             chVideoClick()
+    elif var.get() == 3:
+        print('Playlist Video')
+        if VorA.get() == 1:
+            print('Audio')
+            playlistAudioClick()
+        elif VorA.get() == 2:
+            print('Video')
+            playlistVideoClick()
     else:
         print('Nothing Selected')
         return
@@ -186,9 +267,11 @@ root.configure(background='#f2f2f2')
 frame1 = tkinter.Frame(root, relief="solid", bd=2)
 frame2 = tkinter.Frame(root, relief="solid", bd=2)
 frame3 = tkinter.Frame(root, relief="solid", bd=2)
+frame4 = tkinter.Frame(root, relief="solid", bd=2)
 frame1.pack(side="left", fill="both")
 frame2.pack(side="left", fill="both")
 frame3.pack(side="left", fill="both")
+frame4.pack(side="left", fill="both")
 #####
 lbl = tkinter.Label(frame1, text="URL", font=("Arial Bold", 16))
 lbl.pack(side="right")
@@ -201,6 +284,8 @@ R1 = tkinter.Radiobutton(frame2, text="Single", variable=var, value=1, command=s
 R1.pack(side=LEFT)
 R2 = tkinter.Radiobutton(frame2, text="Channel", variable=var, value=2, command=selChannel)
 R2.pack(side=LEFT)
+R5 = tkinter.Radiobutton(frame2, text="Playlist", variable=var, value=3, command=selPlaylist)
+R5.pack(side=LEFT)
 #####
 R3 = tkinter.Radiobutton(frame3, text="Audio", variable=VorA, value=1, command=selAudio)
 R3.pack(side=LEFT)
