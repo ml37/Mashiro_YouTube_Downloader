@@ -18,10 +18,23 @@ cd=os.getcwd()
 #url='https://www.youtube.com/watch?v=BivuVeVVgF8&list=RDBivuVeVVgF8&start_radio=1&ab_channel=MBCkpop' #For test
 
 
-#UI파일 연결
-#단, UI파일은 Python 코드 파일과 같은 디렉토리에 위치해야한다.
-
-global self
+class Thread1(QThread):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+    def myprogressbar(stream, chunk, bytes_remaining):
+        print('downloadsss')
+        total_size = stream.filesize
+        bytes_downloaded = (total_size - bytes_remaining)
+        bytes_remaining_MB = round(bytes_remaining*0.000001,1)
+        done_size = round((total_size - bytes_remaining)*0.000001,1)
+        global percentage_of_completion
+        percentage_of_completion = round(bytes_downloaded / total_size * 100, 1)
+        #print(f'{percentage_of_completion}%, {done_size}MB/{bytes_remaining_MB}MB')
+        global progress
+        progress = (f'{percentage_of_completion}%, {done_size}MB/{bytes_remaining_MB}MB')
+        print(progress)
+        self.progressBar.setValue(percentage_of_completion)
 
 
 form_class = uic.loadUiType("Downloader.ui")[0]
@@ -80,19 +93,7 @@ class WindowClass(QMainWindow, form_class) :
         print(stream)
         print(chunk)
 
-def myprogressbar(stream, chunk, bytes_remaining):
-    print('downloadsss')
-    total_size = stream.filesize
-    bytes_downloaded = (total_size - bytes_remaining)
-    bytes_remaining_MB = round(bytes_remaining*0.000001,1)
-    done_size = round((total_size - bytes_remaining)*0.000001,1)
-    global percentage_of_completion
-    percentage_of_completion = round(bytes_downloaded / total_size * 100, 1)
-    #print(f'{percentage_of_completion}%, {done_size}MB/{bytes_remaining_MB}MB')
-    global progress
-    progress = (f'{percentage_of_completion}%, {done_size}MB/{bytes_remaining_MB}MB')
-    print(progress)
-    self.progressBar.setValue(percentage_of_completion)
+
         
 if __name__ == "__main__" :
     #QApplication : 프로그램을 실행시켜주는 클래스
