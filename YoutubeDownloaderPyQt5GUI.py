@@ -22,7 +22,7 @@ class Thread1(QThread):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-    def myprogressbar(stream, chunk, bytes_remaining):
+    '''def myprogressbar(stream, chunk, bytes_remaining):
         print('downloadsss')
         total_size = stream.filesize
         bytes_downloaded = (total_size - bytes_remaining)
@@ -34,7 +34,7 @@ class Thread1(QThread):
         global progress
         progress = (f'{percentage_of_completion}%, {done_size}MB/{bytes_remaining_MB}MB')
         print(progress)
-        self.progressBar.setValue(percentage_of_completion)
+        self.progressBar.setValue(percentage_of_completion)'''
 
 
 form_class = uic.loadUiType("Downloader.ui")[0]
