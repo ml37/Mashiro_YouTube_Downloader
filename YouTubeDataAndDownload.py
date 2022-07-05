@@ -6,6 +6,7 @@ from PyQt5 import uic
 import sys
 from pytube import YouTube
 from pytube import Channel
+import urllib
 
 form_class = uic.loadUiType("analyzer.ui")[0]
 class WindowClass(QMainWindow, form_class) :
@@ -15,6 +16,7 @@ class WindowClass(QMainWindow, form_class) :
         self.progressBar.setValue(0)
         self.btn_load.clicked.connect(self.comboboxload)
         self.btn_download.clicked.connect(self.download)
+        self.comboBox.currentIndexChanged.connect(self.on_comboBox_changed)
         self.lbl_len.setText("0")
     def download(self):
         print('download')
@@ -25,14 +27,17 @@ class WindowClass(QMainWindow, form_class) :
                 print('download complete')
                 self.progressBar.setValue(100)
 
-    '''def on_comboBox_changed(self):
+    def on_comboBox_changed(self):
         print('comboBox changed')
-        print(self.comboBox.currentText())
-        print(connecttitleandnum[self.comboBox.currentText()])
-        stream = connecttitleandnum[self.comboBox.currentText()]
-        print(stream.filter(progressive=True).order_by('resolution').desc().first())
-        global streamhaschanged
-        streamhaschanged = stream.filter(progressive=True).order_by('resolution').desc().first()'''
+        for video in ch.videos:
+            if video.title == self.comboBox.currentText():
+                thumbnailurl = video.thumbnail_url
+                print(thumbnailurl)
+                imageFromWeb = urllib.request.urlopen(thumbnailurl).read()
+                self.qPixmapWebVar = QPixmap()
+                self.qPixmapWebVar.loadFromData(imageFromWeb)
+                self.qPixmapWebVar = self.qPixmapWebVar.scaledToWidth(480)
+                self.lbl_picture.setPixmap(self.qPixmapWebVar)
     '''def walalaru(self):
         global connecttitleandnum
         global thumbnailurl
