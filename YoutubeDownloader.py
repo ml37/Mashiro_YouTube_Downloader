@@ -60,7 +60,7 @@ def on_progress_list():
     
 #Single, Audio only download
 def AudioClick():
-    os.chdir(f'Audio')
+    os.chdir('Audio')
     print("Audio Download Button Clicked") 
     urlInput = txt.get()
     print(urlInput)
@@ -69,12 +69,11 @@ def AudioClick():
     yt.bypass_age_gate = True
     yt.register_on_progress_callback(on_progress)
     stream.download()
-    shutil.move(f'{yt.title}.mp4', f'Audio/{yt.title}.mp4')
     print("Download Complete")
     os.chdir(dp)
 #Single, Video Download
 def VideoClick():
-    os.chdir(f'Video')
+    os.chdir('Video')
     print("Video Download Button Clicked")
     urlInput = txt.get()
     print(urlInput)
@@ -83,7 +82,6 @@ def VideoClick():
     yt.bypass_age_gate = True
     yt.register_on_progress_callback(on_progress)
     stream.download()
-    shutil.move(f'{yt.title}.mp4', f'Video/{yt.title}.mp4')
     print("Download Complete")
     os.chdir(dp)
 #All of Channel, Video Download
