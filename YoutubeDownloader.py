@@ -37,6 +37,7 @@ else:
     os.mkdir('Playlist')
 #Set tkinter.Tk() as root
 root = tkinter.Tk()
+
 #progressbar On CLI 
 def on_progress(stream, chunk, bytes_remaining):
     global filesize
@@ -59,6 +60,7 @@ def on_progress_list():
     
 #Single, Audio only download
 def AudioClick():
+    os.chdir(f'Audio')
     print("Audio Download Button Clicked") 
     urlInput = txt.get()
     print(urlInput)
@@ -69,8 +71,10 @@ def AudioClick():
     stream.download()
     shutil.move(f'{yt.title}.mp4', f'Audio/{yt.title}.mp4')
     print("Download Complete")
+    os.chdir(dp)
 #Single, Video Download
 def VideoClick():
+    os.chdir(f'Video')
     print("Video Download Button Clicked")
     urlInput = txt.get()
     print(urlInput)
@@ -81,6 +85,7 @@ def VideoClick():
     stream.download()
     shutil.move(f'{yt.title}.mp4', f'Video/{yt.title}.mp4')
     print("Download Complete")
+    os.chdir(dp)
 #All of Channel, Video Download
 def chVideoClick():
     print('Download Channel Video')
