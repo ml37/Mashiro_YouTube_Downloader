@@ -179,7 +179,7 @@ def playlistVideoClick():
     global count
     count = 0
     global fullcount
-    fullcount = len(ch)
+    fullcount = len(pl)
     for video in pl.videos:
         print(f'---{len(pl)}/{count}-----Title:{video.title}-----------------')
         if os.path.isfile(f'{video.title}.mp4') == False :
