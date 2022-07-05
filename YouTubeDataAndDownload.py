@@ -1,3 +1,4 @@
+from matplotlib.image import thumbnail
 import pytube
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -17,21 +18,23 @@ class WindowClass(QMainWindow, form_class) :
         self.btn_download.clicked.connect(self.download)
         self.lbl_len.setText("0")
         self.comboBox.currentIndexChanged.connect(self.on_comboBox_changed)
-    def download(self, streamdd):
+    def download(self):
         print('download')
-        print(streamdd)
-        streamdd.filter(progressive=True).order_by('resolution').desc().first().download()
-        print('walalaru')
-        #stream = yt.streams.filter(adaptive=True).order_by('resolution').desc().first()
+        print(streamhaschanged)
+        streamhaschanged.download()
 
     def on_comboBox_changed(self):
         print('comboBox changed')
-        global streamdd
-        streamdd = connecttitleandnum[self.comboBox.currentItem()]
-        #stream = yt.streams.filter(adaptive=True).order_by('resolution').desc().first()
+        print(self.comboBox.currentText())
+        print(connecttitleandnum[self.comboBox.currentText()])
+        stream = connecttitleandnum[self.comboBox.currentText()]
+        print(stream.filter(progressive=True).order_by('resolution').desc().first())
+        global streamhaschanged
+        streamhaschanged = stream.filter(progressive=True).order_by('resolution').desc().first()
     def walalaru(self):
         global connect
         global connecttitleandnum
+        global thumbnailurl
         connect = {'title': ''}
         connecttitleandnum = {'title': ''}
         self.comboBox.clear()
@@ -47,6 +50,7 @@ class WindowClass(QMainWindow, form_class) :
             count = count + 1
             connect[count] = video.streams
             connecttitleandnum[video.title] = video.streams
+            thumbnailurl = video.thumbnail_url
             current = count/length
             percent = ('{0:.0f}').format(current*100)
             print(video.title)
