@@ -28,10 +28,14 @@ def urldownload(url):
     #stream_audio_160.download()
     #stream_webm.download()
     print('dl finish')
-    os.system('ffmpeg -i {yt.title}.webm -i {yt.title}.webm -c:v copy -c:a copy {yt.title}merged.webm')
+    os.system('ffmpeg -i video.webm -i audio.webm -c:v copy -c:a copy merged.webm')
+    #os.remove('video.webm')
+    #os.remove('audio.webm')
+    os.rename('merged.webm', yt.title+'.webm')
 
 while True :
     url = input('url : ')
     urldownload(url)
+    os.system('pause')
 
 #ffmpeg -i video.webm -i audio.webm -c:v copy -c:a copy output.webm
